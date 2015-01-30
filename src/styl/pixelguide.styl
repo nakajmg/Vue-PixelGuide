@@ -46,12 +46,55 @@ $prefix = "px-"
     position: absolute
     font-size: 12px
     display: block
-    padding: 5px
+    padding: 0 5px
     color: #fff
     background-color: rgba(0, 0, 0, 0.3)
+    border: 1px solid rgba(0, 0, 0, 0.35)
   [direction="x"] px-info
     left: 100%
     margin-top: 10px
   [direction="y"] px-info
     top: 100%
     margin-left: 10px
+
+
+{$prefix}rulers
+  position: absolute
+  top: 0
+  left: 0
+  right: 0
+  bottom: 0
+  overflow: hidden
+  {$prefix}ruler-vertical
+    position: absolute
+    left: 0
+    top: 0
+    bottom: 0
+    width: 50px
+    border-right: 1px solid rgba(0, 0, 0, 0.4)
+    background-color: rgba(255, 255, 255, .3)
+    padding-left: 40px
+    box-sizing: border-box
+    {$prefix}ruler-grid
+      position: absolute
+      display: block
+      right: 0
+      width: 9px
+      border-top: 1px solid rgba(0, 0, 0, 0.0980392)
+      &[{$prefix}ruler-grid-point]
+        border-color: #000
+      
+    {$prefix}ruler-point
+      position: absolute
+      font-size: 10px
+      transform: scale(.8)
+      // right: calc(100% + 5px)
+      text-align: right;
+      right: 10px
+      margin-top: -7px
+  
+  {$prefix}ruler-horizon
+    position: absolute
+    top: 0
+  
+    

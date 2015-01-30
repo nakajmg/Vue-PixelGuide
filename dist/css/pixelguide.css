@@ -53,9 +53,10 @@ px-guide px-info {
   position: absolute;
   font-size: 12px;
   display: block;
-  padding: 5px;
+  padding: 0 5px;
   color: #fff;
   background-color: rgba(0,0,0,0.3);
+  border: 1px solid rgba(0,0,0,0.35);
 }
 px-guide [direction="x"] px-info {
   left: 100%;
@@ -64,4 +65,45 @@ px-guide [direction="x"] px-info {
 px-guide [direction="y"] px-info {
   top: 100%;
   margin-left: 10px;
+}
+px-rulers {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+}
+px-rulers px-ruler-vertical {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 50px;
+  border-right: 1px solid rgba(0,0,0,0.4);
+  background-color: rgba(255,255,255,0.3);
+  padding-left: 40px;
+  box-sizing: border-box;
+}
+px-rulers px-ruler-vertical px-ruler-grid {
+  position: absolute;
+  display: block;
+  right: 0;
+  width: 9px;
+  border-top: 1px solid rgba(0,0,0,0.098);
+}
+px-rulers px-ruler-vertical px-ruler-grid[px-ruler-grid-point] {
+  border-color: #000;
+}
+px-rulers px-ruler-vertical px-ruler-point {
+  position: absolute;
+  font-size: 10px;
+  transform: scale(0.8);
+  text-align: right;
+  right: 10px;
+  margin-top: -7px;
+}
+px-rulers px-ruler-horizon {
+  position: absolute;
+  top: 0;
 }

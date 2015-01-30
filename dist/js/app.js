@@ -37,7 +37,7 @@ Vue.component("guideline", {
   replace: true,
   partials: {
     line: "<" + prefix + "line v-" + prefix + "guideline v-style=\"left: left + 'px', top: top + 'px'\" v-partial=\"info\"></" + prefix + "line>",
-    info: "<" + prefix + "info v-show=\"isEnter || isDragged\" v-style=\"top: y + 'px', left: x + 'px'\">\n        <" + prefix + "position v-if=\"left\">X:{{left}}px</" + prefix + "position>\n        <" + prefix + "position v-if=\"top\">Y:{{top}}px</" + prefix + "position>\n      </" + prefix + "info>"
+    info: "<" + prefix + "info v-show=\"isEnter || isDragged\" v-style=\"top: y + 'px', left: x + 'px'\">\n        <" + prefix + "position>{{left}}{{top}}</" + prefix + "position>\n      </" + prefix + "info>"
   },
   template: "<" + prefix + "guideline v-partial=\"line\"></" + prefix + "guideline>",
   events: {
@@ -46,7 +46,7 @@ Vue.component("guideline", {
   methods: {
     _onMove: function OnMove(e) {
       var moveTo = this.moveTo[this.direction];
-      this.$value = e[moveTo];
+      this.$value = "" + e[moveTo];
     },
     _onChange$value: function OnChange$value() {
       this[this.position[this.direction]] = this.$value;
@@ -54,7 +54,7 @@ Vue.component("guideline", {
   }
 });
 
-var vm = new Vue({
+var guidelines = new Vue({
   events: {
     "start:drag": "_onStartDrag",
     "end:drag": "_onEndDrag"
@@ -83,5 +83,47 @@ var vm = new Vue({
   }
 });
 
-vm.$mount();
-vm.$appendTo("body");
+guidelines.$mount();
+
+Vue.component("grid-vertical", {
+  replace: true,
+  data: function data() {
+    return { isPoint: null };
+  },
+  template: "\n    <" + prefix + "ruler-grid v-style=\"top: $value + 'px'\" v-attr=\"" + prefix + "ruler-grid-point: isPoint\"></" + prefix + "ruler-grid>\n    <" + prefix + "ruler-point v-style=\"top: $value + 'px'\" v-if=\"isPoint\">{{$value}}</" + prefix + "ruler-point>\n  ",
+  compiled: function compiled() {
+    if (!this.$value) return;
+    this.isPoint = !(this.$value % 50);
+  }
+});
+
+var ruler = new Vue({
+  data: {
+    vertical: null,
+    horizon: null
+  },
+  replace: true,
+  created: function created() {
+    var varr = [];
+    var harr = [];
+    var vleng = window.outerHeight;
+    var hleng = window.outerWidth;
+    for (var i = 0; i < vleng; i++) {
+      i % 2 ? "" : varr.push(i);
+    }
+    for (var i = 0; i < hleng; i++) {
+      i % 2 ? "" : harr.push(i);
+    }
+    this.vertical = varr;
+    this.horizon = harr;
+  },
+
+  partials: {
+    vertical: "\n      <" + prefix + "ruler-vertical>\n        <grid v-repeat=\"vertical\" v-component=\"grid-vertical\"></grid>\n      </" + prefix + "ruler-vertical>",
+    horizon: "\n      <" + prefix + "ruler-horizon>\n        <grid v-repeat=\"horizon\" v-component=\"grid-vertical\"></grid>\n      </" + prefix + "ruler-horizon>"
+  },
+  template: "\n    <" + prefix + "rulers>\n      <template v-partial=\"vertical\"></template>\n      <template v-partial=\"horizon\"></template>\n    </" + prefix + "rulers>\n  "
+});
+ruler.$mount();
+ruler.$appendTo("body");
+guidelines.$appendTo("body");
