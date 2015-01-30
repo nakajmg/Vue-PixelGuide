@@ -29,9 +29,7 @@ Vue.component('guideline', {
     return {direction: null, left: null, top: null, isEnter: false, isDragged: false, x: null, y: null, position: {x: 'top', y: 'left'}, moveTo: {x: 'y', y: 'x'} }
   },
   compiled() {
-    this.$watch('$value', ()=> {
-      this[this.position[this.direction]] = this.$value;
-    }, false, true);
+    this.$watch('$value', this._onChange$value, false, true);
   },
   replace: true,
   partials: {
@@ -43,7 +41,19 @@ Vue.component('guideline', {
         <${prefix}position v-if="top">Y:{{top}}px</${prefix}position>
       </${prefix}info>`
   },
-  template: `<${prefix}guideline v-partial="line"></${prefix}guideline>`
+  template: `<${prefix}guideline v-partial="line"></${prefix}guideline>`,
+  events: {
+    move: '_onMove'
+  },
+  methods: {
+    _onMove(e) {
+      var moveTo = this.moveTo[this.direction];
+      this.$value = e[moveTo];
+    },
+    _onChange$value() {
+      this[this.position[this.direction]] = this.$value;  
+    }
+  }
 })
 
 var vm = new Vue({
@@ -70,16 +80,16 @@ var vm = new Vue({
   `,
   methods: {
     _onMouseMove(e) {
-      if (!this.isDragged) return;
-      this.current.$value = e[this.current.moveTo[this.current.direction]];
+      if (!this.isDragged || !this.current) return;
+      this.current.$emit('move', e);
     },
     _onStartDrag(vm) {
       this.current = vm;
       this.isDragged = true;
     },
     _onEndDrag() {
-      this.isDragged = false;
       this.current = null;
+      this.isDragged = false;
     }
   }
 });
