@@ -1,0 +1,56 @@
+px-guide
+  position: absolute
+  top: 0
+  left: 0
+  right: 0
+  bottom: 0
+
+  vertical
+    position: absolute
+    left: 0
+    width: 100%
+    height: 1px
+    background-color: red
+    cursor: ns-resize
+    &:before, &:after
+      content: ''
+      position: absolute
+      width: 100%
+      left: 0
+      border-top: 1px solid transparent
+    &:before
+      bottom: 100%
+    &:after
+      top: 100%
+
+  horizon
+    position: absolute
+    top: 0
+    height: 100%
+    width: 1px
+    background-color: blue
+    cursor: ew-resize
+    &:before, &:after
+      content: ''
+      position: absolute
+      height: 100%
+      top: 0
+      border-left: 1px solid transparent
+    &:before
+      left: 100%
+    &:after
+      right: 100%
+
+  info
+    position: absolute
+    font-size: 12px
+    display: block
+    padding: 5px
+    color: #fff
+    background-color: rgba(0, 0, 0, 0.3)
+  horizon info
+    left: 100%
+    margin-top: 10px
+  vertical info
+    top: 100%
+    margin-left: 10px

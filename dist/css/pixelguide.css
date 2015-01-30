@@ -1,0 +1,67 @@
+px-guide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+px-guide vertical {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background-color: #f00;
+  cursor: ns-resize;
+}
+px-guide vertical:before,
+px-guide vertical:after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  left: 0;
+  border-top: 1px solid transparent;
+}
+px-guide vertical:before {
+  bottom: 100%;
+}
+px-guide vertical:after {
+  top: 100%;
+}
+px-guide horizon {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 1px;
+  background-color: #00f;
+  cursor: ew-resize;
+}
+px-guide horizon:before,
+px-guide horizon:after {
+  content: '';
+  position: absolute;
+  height: 100%;
+  top: 0;
+  border-left: 1px solid transparent;
+}
+px-guide horizon:before {
+  left: 100%;
+}
+px-guide horizon:after {
+  right: 100%;
+}
+px-guide info {
+  position: absolute;
+  font-size: 12px;
+  display: block;
+  padding: 5px;
+  color: #fff;
+  background-color: rgba(0,0,0,0.3);
+}
+px-guide horizon info {
+  left: 100%;
+  margin-top: 10px;
+}
+px-guide vertical info {
+  top: 100%;
+  margin-left: 10px;
+}

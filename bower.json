@@ -1,0 +1,14 @@
+{
+  "name": "Vue-PixelGuide",
+  "version": "0.0.1",
+  "homepage": "https://github.com/nakajmg/Vue-PixelGuide",
+  "authors": [
+    "nakajmg <nakajima.jmg@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components"
+  ]
+}
