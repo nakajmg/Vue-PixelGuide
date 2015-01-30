@@ -1,11 +1,12 @@
-px-guide
+$prefix = "px-"
+{$prefix}guide
   position: absolute
   top: 0
   left: 0
   right: 0
   bottom: 0
 
-  vertical
+  [direction="vertical"] px-line
     position: absolute
     left: 0
     width: 100%
@@ -23,7 +24,7 @@ px-guide
     &:after
       top: 100%
 
-  horizon
+  [direction="horizon"] px-line
     position: absolute
     top: 0
     height: 100%
@@ -41,16 +42,16 @@ px-guide
     &:after
       right: 100%
 
-  info
+  {$prefix}info
     position: absolute
     font-size: 12px
     display: block
     padding: 5px
     color: #fff
     background-color: rgba(0, 0, 0, 0.3)
-  horizon info
+  [direction="horizon"] px-info
     left: 100%
     margin-top: 10px
-  vertical info
+  [direction="vertical"] px-info
     top: 100%
     margin-left: 10px

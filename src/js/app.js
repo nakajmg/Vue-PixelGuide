@@ -1,63 +1,51 @@
-Vue.component('l-horizon', {
-  data() {
-    return {direction: 'horizon', isEnter: false, isDragged: false, y: null}
-  },
-  template: `
-    <horizon 
-      v-on="mousedown: _onMouseDown, mouseup: _onMouseUp, mouseenter: _onMouseEnter, mouseleave: _onMouseLeave"
-      v-style="left: $value + 'px'"
-    >
-      <info v-show="isEnter || isDragged" v-style="top: y + 'px'">X:{{$value}}px</info>
-    </horizon>
-  `,
-  methods: {
-    _onMouseDown() {
-      this.isDragged = true;
-      this.$dispatch('start:drag', this);
-    },
-    _onMouseUp() {
-      this.isDragged = false;
-      this.$dispatch('end:drag', this);
-    },
-    _onMouseEnter(e) {
-      this.isEnter = true;
-      this.y = e.y;
-    },
-    _onMouseLeave() {
-      this.isEnter = false;
+var prefix = 'px-'
+Vue.directive(`${prefix}guideline`, {
+  bind() {
+    this._onMouseEnter = (e)=> {
+      this.vm.isEnter = true;
+      var pos = this.vm.position[this.vm.direction][1];
+      this.vm[pos] = e[pos]
     }
-  },
-});
-
-Vue.component('l-vertical', {
-  data(){
-    return {direction: 'vertical', isEnter: false, isDragged: false, x: null}
-  },
-  template: `
-    <vertical v-on="mousedown: _onMouseDown, mouseup: _onMouseUp, mouseenter: _onMouseEnter, mouseleave: _onMouseLeave"
-      v-style="top: $value + 'px'"
-    >
-      <info v-show="isEnter || isDragged" v-style="left: x + 'px'">Y:{{$value}}px</info>
-    </vertical>
-  `,
-  methods: {
-    _onMouseDown() {    
-      this.isDragged = true;  
-      this.$dispatch('start:drag', this);
-    },
-    _onMouseUp() {
-      this.isDragged = false;
-      this.$dispatch('end:drag', this);
-    },
-    _onMouseEnter(e) {
-      this.isEnter = true;
-      this.x = e.x;
-    },
-    _onMouseLeave() {
-      this.isEnter = false;
+    this._onMouseLeave = ()=> {
+      this.vm.isEnter = false;
     }
+    this._onMouseDown = ()=> {
+      this.vm.isDragged = true;
+      this.vm.$dispatch('start:drag', this.vm);
+    }
+    this._onMouseUp = ()=> {
+      this.vm.isDragged = false;
+      this.vm.$dispatch('end:drag', this.vm);
+    }
+    this.el.addEventListener('mouseenter', this._onMouseEnter)
+    this.el.addEventListener('mouseleave', this._onMouseLeave)
+    this.el.addEventListener('mousedown', this._onMouseDown)
+    this.el.addEventListener('mouseup', this._onMouseUp)
   }
-});
+})
+
+Vue.component('guideline', {
+  paramAttributes: ['direction'],
+  data() {
+    return {direction: null, left: null, top: null, isEnter: false, isDragged: false, x: null, y: null, position: {horizon: ['left', 'y'], vertical: ['top', 'x']}}
+  },
+  compiled() {
+    this.$watch('$value', ()=> {
+      this[this.position[this.direction][0]] = this.$value
+    }, false, true);
+  },
+  replace: true,
+  partials: {
+    line:
+      `<${prefix}line v-${prefix}guideline v-style="left: left + 'px', top: top + 'px'" v-partial="info"></${prefix}line>`,
+    info:
+      `<${prefix}info v-show="isEnter || isDragged" v-style="top: y + 'px', left: x + 'px'">
+        <${prefix}position v-if="left">X:{{left}}px</lineinfo>
+        <${prefix}position v-if="top">Y:{{top}}px</lineinfo>
+      </${prefix}info>`
+  },
+  template: `<${prefix}guideline v-partial="line"></${prefix}guideline>`
+})
 
 var vm = new Vue({
   events: {
@@ -76,10 +64,10 @@ var vm = new Vue({
   },
   replace: true,
   template: `
-    <px-guide v-on="mousemove: _onMouseMove, mouseup: _onEndDrag">
-      <template v-repeat="horizon" v-component="l-horizon"></template>
-      <template v-repeat="vertical" v-component="l-vertical"></template>
-    </px-guide>
+    <${prefix}guide v-on="mousemove: _onMouseMove, mouseup: _onEndDrag">
+      <horizon v-repeat="horizon" v-component="guideline" direction="horizon"></horizon>
+      <vertical v-repeat="vertical" v-component="guideline" direction="vertical"></vertical>
+    </${prefix}guide>
   `,
   methods: {
     _onMouseMove(e) {
@@ -91,8 +79,8 @@ var vm = new Vue({
         this.current.$value = e.y;
       }
     },
-    _onStartDrag(target) {
-      this.current = target;
+    _onStartDrag(vm) {
+      this.current = vm;
       this.isDragged = true;
     },
     _onEndDrag() {
