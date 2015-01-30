@@ -6,7 +6,7 @@ $prefix = "px-"
   right: 0
   bottom: 0
 
-  [direction="vertical"] px-line
+  [direction="x"] px-line
     position: absolute
     left: 0
     width: 100%
@@ -24,7 +24,7 @@ $prefix = "px-"
     &:after
       top: 100%
 
-  [direction="horizon"] px-line
+  [direction="y"] px-line
     position: absolute
     top: 0
     height: 100%
@@ -49,9 +49,9 @@ $prefix = "px-"
     padding: 5px
     color: #fff
     background-color: rgba(0, 0, 0, 0.3)
-  [direction="horizon"] px-info
+  [direction="x"] px-info
     left: 100%
     margin-top: 10px
-  [direction="vertical"] px-info
+  [direction="y"] px-info
     top: 100%
     margin-left: 10px

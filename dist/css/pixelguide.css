@@ -5,7 +5,7 @@ px-guide {
   right: 0;
   bottom: 0;
 }
-px-guide [direction="vertical"] px-line {
+px-guide [direction="x"] px-line {
   position: absolute;
   left: 0;
   width: 100%;
@@ -13,21 +13,21 @@ px-guide [direction="vertical"] px-line {
   background-color: #f00;
   cursor: ns-resize;
 }
-px-guide [direction="vertical"] px-line:before,
-px-guide [direction="vertical"] px-line:after {
+px-guide [direction="x"] px-line:before,
+px-guide [direction="x"] px-line:after {
   content: '';
   position: absolute;
   width: 100%;
   left: 0;
   border-top: 1px solid transparent;
 }
-px-guide [direction="vertical"] px-line:before {
+px-guide [direction="x"] px-line:before {
   bottom: 100%;
 }
-px-guide [direction="vertical"] px-line:after {
+px-guide [direction="x"] px-line:after {
   top: 100%;
 }
-px-guide [direction="horizon"] px-line {
+px-guide [direction="y"] px-line {
   position: absolute;
   top: 0;
   height: 100%;
@@ -35,18 +35,18 @@ px-guide [direction="horizon"] px-line {
   background-color: #00f;
   cursor: ew-resize;
 }
-px-guide [direction="horizon"] px-line:before,
-px-guide [direction="horizon"] px-line:after {
+px-guide [direction="y"] px-line:before,
+px-guide [direction="y"] px-line:after {
   content: '';
   position: absolute;
   height: 100%;
   top: 0;
   border-left: 1px solid transparent;
 }
-px-guide [direction="horizon"] px-line:before {
+px-guide [direction="y"] px-line:before {
   left: 100%;
 }
-px-guide [direction="horizon"] px-line:after {
+px-guide [direction="y"] px-line:after {
   right: 100%;
 }
 px-guide px-info {
@@ -57,11 +57,11 @@ px-guide px-info {
   color: #fff;
   background-color: rgba(0,0,0,0.3);
 }
-px-guide [direction="horizon"] px-info {
+px-guide [direction="x"] px-info {
   left: 100%;
   margin-top: 10px;
 }
-px-guide [direction="vertical"] px-info {
+px-guide [direction="y"] px-info {
   top: 100%;
   margin-left: 10px;
 }

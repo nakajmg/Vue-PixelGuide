@@ -6,8 +6,7 @@ Vue.directive("" + prefix + "guideline", {
     var _this = this;
     this._onMouseEnter = function (e) {
       _this.vm.isEnter = true;
-      var pos = _this.vm.position[_this.vm.direction][1];
-      _this.vm[pos] = e[pos];
+      _this.vm[_this.vm.direction] = e[_this.vm.direction];
     };
     this._onMouseLeave = function () {
       _this.vm.isEnter = false;
@@ -30,18 +29,18 @@ Vue.directive("" + prefix + "guideline", {
 Vue.component("guideline", {
   paramAttributes: ["direction"],
   data: function data() {
-    return { direction: null, left: null, top: null, isEnter: false, isDragged: false, x: null, y: null, position: { horizon: ["left", "y"], vertical: ["top", "x"] } };
+    return { direction: null, left: null, top: null, isEnter: false, isDragged: false, x: null, y: null, position: { x: "top", y: "left" }, moveTo: { x: "y", y: "x" } };
   },
   compiled: function compiled() {
     var _this2 = this;
     this.$watch("$value", function () {
-      _this2[_this2.position[_this2.direction][0]] = _this2.$value;
+      _this2[_this2.position[_this2.direction]] = _this2.$value;
     }, false, true);
   },
   replace: true,
   partials: {
     line: "<" + prefix + "line v-" + prefix + "guideline v-style=\"left: left + 'px', top: top + 'px'\" v-partial=\"info\"></" + prefix + "line>",
-    info: "<" + prefix + "info v-show=\"isEnter || isDragged\" v-style=\"top: y + 'px', left: x + 'px'\">\n        <" + prefix + "position v-if=\"left\">X:{{left}}px</lineinfo>\n        <" + prefix + "position v-if=\"top\">Y:{{top}}px</lineinfo>\n      </" + prefix + "info>"
+    info: "<" + prefix + "info v-show=\"isEnter || isDragged\" v-style=\"top: y + 'px', left: x + 'px'\">\n        <" + prefix + "position v-if=\"left\">X:{{left}}px</" + prefix + "position>\n        <" + prefix + "position v-if=\"top\">Y:{{top}}px</" + prefix + "position>\n      </" + prefix + "info>"
   },
   template: "<" + prefix + "guideline v-partial=\"line\"></" + prefix + "guideline>"
 });
@@ -58,15 +57,11 @@ var vm = new Vue({
     vertical: [4, 8, 20, 30]
   },
   replace: true,
-  template: "\n    <" + prefix + "guide v-on=\"mousemove: _onMouseMove, mouseup: _onEndDrag\">\n      <horizon v-repeat=\"horizon\" v-component=\"guideline\" direction=\"horizon\"></horizon>\n      <vertical v-repeat=\"vertical\" v-component=\"guideline\" direction=\"vertical\"></vertical>\n    </" + prefix + "guide>\n  ",
+  template: "\n    <" + prefix + "guide v-on=\"mousemove: _onMouseMove, mouseup: _onEndDrag\">\n      <horizon v-repeat=\"horizon\" v-component=\"guideline\" direction=\"x\"></horizon>\n      <vertical v-repeat=\"vertical\" v-component=\"guideline\" direction=\"y\"></vertical>\n    </" + prefix + "guide>\n  ",
   methods: {
     _onMouseMove: function OnMouseMove(e) {
       if (!this.isDragged) return;
-      if (this.current.direction === "horizon") {
-        this.current.$value = e.x;
-      } else {
-        this.current.$value = e.y;
-      }
+      this.current.$value = e[this.current.moveTo[this.current.direction]];
     },
     _onStartDrag: function OnStartDrag(vm) {
       this.current = vm;

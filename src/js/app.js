@@ -3,8 +3,7 @@ Vue.directive(`${prefix}guideline`, {
   bind() {
     this._onMouseEnter = (e)=> {
       this.vm.isEnter = true;
-      var pos = this.vm.position[this.vm.direction][1];
-      this.vm[pos] = e[pos]
+      this.vm[this.vm.direction] = e[this.vm.direction]
     }
     this._onMouseLeave = ()=> {
       this.vm.isEnter = false;
@@ -27,11 +26,11 @@ Vue.directive(`${prefix}guideline`, {
 Vue.component('guideline', {
   paramAttributes: ['direction'],
   data() {
-    return {direction: null, left: null, top: null, isEnter: false, isDragged: false, x: null, y: null, position: {horizon: ['left', 'y'], vertical: ['top', 'x']}}
+    return {direction: null, left: null, top: null, isEnter: false, isDragged: false, x: null, y: null, position: {x: 'top', y: 'left'}, moveTo: {x: 'y', y: 'x'} }
   },
   compiled() {
     this.$watch('$value', ()=> {
-      this[this.position[this.direction][0]] = this.$value
+      this[this.position[this.direction]] = this.$value;
     }, false, true);
   },
   replace: true,
@@ -40,8 +39,8 @@ Vue.component('guideline', {
       `<${prefix}line v-${prefix}guideline v-style="left: left + 'px', top: top + 'px'" v-partial="info"></${prefix}line>`,
     info:
       `<${prefix}info v-show="isEnter || isDragged" v-style="top: y + 'px', left: x + 'px'">
-        <${prefix}position v-if="left">X:{{left}}px</lineinfo>
-        <${prefix}position v-if="top">Y:{{top}}px</lineinfo>
+        <${prefix}position v-if="left">X:{{left}}px</${prefix}position>
+        <${prefix}position v-if="top">Y:{{top}}px</${prefix}position>
       </${prefix}info>`
   },
   template: `<${prefix}guideline v-partial="line"></${prefix}guideline>`
@@ -65,19 +64,14 @@ var vm = new Vue({
   replace: true,
   template: `
     <${prefix}guide v-on="mousemove: _onMouseMove, mouseup: _onEndDrag">
-      <horizon v-repeat="horizon" v-component="guideline" direction="horizon"></horizon>
-      <vertical v-repeat="vertical" v-component="guideline" direction="vertical"></vertical>
+      <horizon v-repeat="horizon" v-component="guideline" direction="x"></horizon>
+      <vertical v-repeat="vertical" v-component="guideline" direction="y"></vertical>
     </${prefix}guide>
   `,
   methods: {
     _onMouseMove(e) {
       if (!this.isDragged) return;
-      if (this.current.direction === 'horizon') {
-        this.current.$value = e.x;
-      }
-      else {
-        this.current.$value = e.y;
-      }
+      this.current.$value = e[this.current.moveTo[this.current.direction]];
     },
     _onStartDrag(vm) {
       this.current = vm;
