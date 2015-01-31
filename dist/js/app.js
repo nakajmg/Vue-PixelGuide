@@ -62,8 +62,8 @@ var guidelines = new Vue({
   data: {
     isDragged: false,
     current: null,
-    horizon: [10, 15, 20, 30],
-    vertical: [4, 8, 20, 30]
+    horizon: [60, 75, 80, 140],
+    vertical: [90, 120, 150, 300]
   },
   replace: true,
   template: "\n    <" + prefix + "guide v-on=\"mousemove: _onMouseMove, mouseup: _onEndDrag\">\n      <" + prefix + "rulers></" + prefix + "rulers>\n      <horizon v-repeat=\"horizon\" v-component=\"guideline\" direction=\"x\"></horizon>\n      <vertical v-repeat=\"vertical\" v-component=\"guideline\" direction=\"y\"></vertical>\n    </" + prefix + "guide>\n  ",
@@ -104,7 +104,7 @@ Vue.component("ruler-point", {
   data: function data() {
     return { top: null, left: null, position: { vertical: "top", horizon: "left" } };
   },
-  template: "\n    <" + prefix + "ruler-point v-style=\"top: top + 'px', left: left + 'px'\">{{$value}}</" + prefix + "ruler-point>\n  ",
+  template: "\n    <" + prefix + "ruler-point-value v-style=\"top: top + 'px', left: left + 'px'\">{{$value}}</" + prefix + "ruler-point-value>\n  ",
   compiled: function compiled() {
     if (!this.$value) return;
     this[this.position[this.direction]] = this.$value;
@@ -128,7 +128,7 @@ var ruler = new Vue({
       this.hpoint = _.range(50, window.outerWidth, 50);
     }
   },
-  template: "\n    <" + prefix + "ruler-vertical>\n      <" + prefix + "ruler-point-value v-repeat=\"vpoint\" v-component=\"ruler-point\" direction=\"vertical\"></" + prefix + "ruler-point-value>\n      <" + prefix + "ruler-vertical-grid v-repeat=\"vertical\" v-component=\"ruler-grid\" direction=\"vertical\"></" + prefix + "ruler-vertical-grid>\n    </" + prefix + "ruler-vertical>\n    <" + prefix + "ruler-horizon>\n      <" + prefix + "ruler-point-value v-repeat=\"hpoint\" v-component=\"ruler-point\" direction=\"horizon\"></" + prefix + "ruler-point-value>\n      <" + prefix + "ruler-horizon-grid v-repeat=\"horizon\" v-component=\"ruler-grid\" direction=\"horizon\"></" + prefix + "ruler-horizon-grid>\n    </" + prefix + "ruler-horizon>\n  "
+  template: "\n    <" + prefix + "ruler-vertical>\n      <" + prefix + "ruler-point v-repeat=\"vpoint\" v-component=\"ruler-point\" direction=\"vertical\"></" + prefix + "ruler-point>\n      <" + prefix + "ruler-vertical-grid v-repeat=\"vertical\" v-component=\"ruler-grid\" direction=\"vertical\"></" + prefix + "ruler-vertical-grid>\n    </" + prefix + "ruler-vertical>\n    <" + prefix + "ruler-horizon>\n      <" + prefix + "ruler-point v-repeat=\"hpoint\" v-component=\"ruler-point\" direction=\"horizon\"></" + prefix + "ruler-point>\n      <" + prefix + "ruler-horizon-grid v-repeat=\"horizon\" v-component=\"ruler-grid\" direction=\"horizon\"></" + prefix + "ruler-horizon-grid>\n    </" + prefix + "ruler-horizon>\n  "
 });
 ruler.$mount();
 guidelines.$appendTo("body");

@@ -94,7 +94,7 @@ px-rulers px-ruler-vertical px-ruler-grid[px-ruler-grid-point] {
 px-rulers px-ruler-vertical px-ruler-grid[px-ruler-grid-scale] {
   border-color: #000;
 }
-px-rulers px-ruler-vertical px-ruler-point {
+px-rulers px-ruler-vertical px-ruler-point-value {
   position: absolute;
   font-size: 10px;
   transform: scale(0.7);
@@ -127,7 +127,7 @@ px-rulers px-ruler-horizon px-ruler-grid[px-ruler-grid-point] {
 px-rulers px-ruler-horizon px-ruler-grid[px-ruler-grid-scale] {
   border-color: #000;
 }
-px-rulers px-ruler-horizon px-ruler-point {
+px-rulers px-ruler-horizon px-ruler-point-value {
   position: absolute;
   font-size: 10px;
   transform: scale(0.7);

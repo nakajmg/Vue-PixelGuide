@@ -21,7 +21,7 @@ Vue.directive(`${prefix}guideline`, {
     this.el.addEventListener('mousedown', this._onMouseDown)
     this.el.addEventListener('mouseup', this._onMouseUp)
   }
-})
+});
 
 Vue.component('guideline', {
   paramAttributes: ['direction'],
@@ -53,7 +53,7 @@ Vue.component('guideline', {
       this[this.position[this.direction]] = this.$value;  
     }
   }
-})
+});
 
 var guidelines = new Vue({
   events: {
@@ -64,10 +64,10 @@ var guidelines = new Vue({
     isDragged: false,
     current: null,
     horizon: [
-      10, 15, 20, 30
+      60, 75, 80, 140
     ],
     vertical: [
-      4, 8, 20, 30
+      90, 120, 150, 300
     ]
   },
   replace: true,
@@ -118,13 +118,13 @@ Vue.component('ruler-point', {
     return {top: null, left: null, position: {vertical: 'top', horizon: 'left'} }
   },
   template: `
-    <${prefix}ruler-point v-style="top: top + 'px', left: left + 'px'">{{$value}}</${prefix}ruler-point>
+    <${prefix}ruler-point-value v-style="top: top + 'px', left: left + 'px'">{{$value}}</${prefix}ruler-point-value>
   `,
   compiled() {
     if (!this.$value) return;
     this[this.position[this.direction]] = this.$value
   }
-})
+});
 
 var ruler = new Vue({
   data: { vertical: null, horizon: null, vpoint: null, hpoint: null },
@@ -145,11 +145,11 @@ var ruler = new Vue({
   },
   template: `
     <${prefix}ruler-vertical>
-      <${prefix}ruler-point-value v-repeat="vpoint" v-component="ruler-point" direction="vertical"></${prefix}ruler-point-value>
+      <${prefix}ruler-point v-repeat="vpoint" v-component="ruler-point" direction="vertical"></${prefix}ruler-point>
       <${prefix}ruler-vertical-grid v-repeat="vertical" v-component="ruler-grid" direction="vertical"></${prefix}ruler-vertical-grid>
     </${prefix}ruler-vertical>
     <${prefix}ruler-horizon>
-      <${prefix}ruler-point-value v-repeat="hpoint" v-component="ruler-point" direction="horizon"></${prefix}ruler-point-value>
+      <${prefix}ruler-point v-repeat="hpoint" v-component="ruler-point" direction="horizon"></${prefix}ruler-point>
       <${prefix}ruler-horizon-grid v-repeat="horizon" v-component="ruler-grid" direction="horizon"></${prefix}ruler-horizon-grid>
     </${prefix}ruler-horizon>
   `
