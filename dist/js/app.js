@@ -85,12 +85,12 @@ var guidelines = new Vue({
 
 guidelines.$mount();
 
-Vue.component("grid-vertical", {
+Vue.component("ruler-grid", {
   paramAttributes: ["direction"],
   data: function data() {
     return { isPoint: null, isScale: null, top: null, left: null, position: { vertical: "top", horizon: "left" } };
   },
-  template: "\n    <" + prefix + "ruler-grid v-style=\"top: top + 'px', left: left + 'px'\" v-attr=\"" + prefix + "ruler-grid-point: isPoint, " + prefix + "ruler-grid-scale: isScale\"></" + prefix + "ruler-grid>\n    <" + prefix + "ruler-point v-style=\"top: top + 'px', left: left + 'px'\" v-if=\"isPoint\">{{$value}}</" + prefix + "ruler-point>\n  ",
+  template: "\n    <" + prefix + "ruler-grid v-style=\"top: top + 'px', left: left + 'px'\" v-attr=\"" + prefix + "ruler-grid-point: isPoint, " + prefix + "ruler-grid-scale: isScale\"></" + prefix + "ruler-grid>\n  ",
   compiled: function compiled() {
     if (!this.$value) return;
     this[this.position[this.direction]] = this.$value;
@@ -99,27 +99,36 @@ Vue.component("grid-vertical", {
   }
 });
 
-var ruler = new Vue({
-  data: {
-    vertical: null,
-    horizon: null
+Vue.component("ruler-point", {
+  paramAttributes: ["direction"],
+  data: function data() {
+    return { top: null, left: null, position: { vertical: "top", horizon: "left" } };
   },
+  template: "\n    <" + prefix + "ruler-point v-style=\"top: top + 'px', left: left + 'px'\">{{$value}}</" + prefix + "ruler-point>\n  ",
+  compiled: function compiled() {
+    if (!this.$value) return;
+    this[this.position[this.direction]] = this.$value;
+  }
+});
+
+var ruler = new Vue({
+  data: { vertical: null, horizon: null, vpoint: null, hpoint: null },
   replace: true,
   created: function created() {
-    var varr = [];
-    var harr = [];
-    var vleng = window.outerHeight;
-    var hleng = window.outerWidth;
-    for (var i = 0; i < vleng; i++) {
-      i % 2 ? "" : varr.push(i);
-    }
-    for (var i = 0; i < hleng; i++) {
-      i % 2 ? "" : harr.push(i);
-    }
-    this.vertical = varr;
-    this.horizon = harr;
+    this._createRulers();
   },
-  template: "\n    <" + prefix + "ruler-vertical>\n      <" + prefix + "ruler-vertical-grid v-repeat=\"vertical\" v-component=\"grid-vertical\" direction=\"vertical\"></" + prefix + "ruler-vertical-grid>\n    </" + prefix + "ruler-vertical>\n    <" + prefix + "ruler-horizon>\n      <" + prefix + "ruler-horizon-grid v-repeat=\"horizon\" v-component=\"grid-vertical\" direction=\"horizon\"></" + prefix + "ruler-horizon-grid>\n    </" + prefix + "ruler-horizon>\n  "
+  ready: function ready() {
+    window.addEventListener("resize", _.debounce(this._createRulers, 500));
+  },
+  methods: {
+    _createRulers: function CreateRulers() {
+      this.vertical = _.range(0, window.outerHeight, 2);
+      this.horizon = _.range(0, window.outerWidth, 2);
+      this.vpoint = _.range(50, window.outerHeight, 50);
+      this.hpoint = _.range(50, window.outerWidth, 50);
+    }
+  },
+  template: "\n    <" + prefix + "ruler-vertical>\n      <" + prefix + "ruler-point-value v-repeat=\"vpoint\" v-component=\"ruler-point\" direction=\"vertical\"></" + prefix + "ruler-point-value>\n      <" + prefix + "ruler-vertical-grid v-repeat=\"vertical\" v-component=\"ruler-grid\" direction=\"vertical\"></" + prefix + "ruler-vertical-grid>\n    </" + prefix + "ruler-vertical>\n    <" + prefix + "ruler-horizon>\n      <" + prefix + "ruler-point-value v-repeat=\"hpoint\" v-component=\"ruler-point\" direction=\"horizon\"></" + prefix + "ruler-point-value>\n      <" + prefix + "ruler-horizon-grid v-repeat=\"horizon\" v-component=\"ruler-grid\" direction=\"horizon\"></" + prefix + "ruler-horizon-grid>\n    </" + prefix + "ruler-horizon>\n  "
 });
 ruler.$mount();
 guidelines.$appendTo("body");

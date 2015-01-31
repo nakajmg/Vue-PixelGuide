@@ -96,14 +96,13 @@ var guidelines = new Vue({
 
 guidelines.$mount();
 
-Vue.component('grid-vertical', {
+Vue.component('ruler-grid', {
   paramAttributes: ['direction'],
   data() {
     return {isPoint: null, isScale: null, top: null, left: null, position: {vertical: 'top', horizon: 'left'} }
   },
   template: `
     <${prefix}ruler-grid v-style="top: top + 'px', left: left + 'px'" v-attr="${prefix}ruler-grid-point: isPoint, ${prefix}ruler-grid-scale: isScale"></${prefix}ruler-grid>
-    <${prefix}ruler-point v-style="top: top + 'px', left: left + 'px'" v-if="isPoint">{{$value}}</${prefix}ruler-point>
   `,
   compiled() {
     if (!this.$value) return;
@@ -113,32 +112,45 @@ Vue.component('grid-vertical', {
   }
 });
 
-var ruler = new Vue({
-  data: {
-    vertical: null,
-    horizon: null
+Vue.component('ruler-point', {
+  paramAttributes: ['direction'],
+  data() {
+    return {top: null, left: null, position: {vertical: 'top', horizon: 'left'} }
   },
+  template: `
+    <${prefix}ruler-point v-style="top: top + 'px', left: left + 'px'">{{$value}}</${prefix}ruler-point>
+  `,
+  compiled() {
+    if (!this.$value) return;
+    this[this.position[this.direction]] = this.$value
+  }
+})
+
+var ruler = new Vue({
+  data: { vertical: null, horizon: null, vpoint: null, hpoint: null },
   replace: true,
   created() {
-    var varr = [];
-    var harr = [];
-    var vleng = window.outerHeight;
-    var hleng = window.outerWidth;
-    for(var i = 0; i < vleng; i++) {
-      i % 2 ? '' : varr.push(i);
+    this._createRulers();
+  },
+  ready() {
+    window.addEventListener('resize', _.debounce(this._createRulers, 500))
+  },
+  methods: {
+    _createRulers() {
+      this.vertical = _.range(0, window.outerHeight, 2);
+      this.horizon = _.range(0, window.outerWidth, 2);
+      this.vpoint = _.range(50, window.outerHeight, 50);
+      this.hpoint = _.range(50, window.outerWidth, 50);
     }
-    for(var i = 0; i < hleng; i++) {
-      i % 2 ? '' : harr.push(i);
-    }
-    this.vertical = varr;
-    this.horizon = harr;
   },
   template: `
     <${prefix}ruler-vertical>
-      <${prefix}ruler-vertical-grid v-repeat="vertical" v-component="grid-vertical" direction="vertical"></${prefix}ruler-vertical-grid>
+      <${prefix}ruler-point-value v-repeat="vpoint" v-component="ruler-point" direction="vertical"></${prefix}ruler-point-value>
+      <${prefix}ruler-vertical-grid v-repeat="vertical" v-component="ruler-grid" direction="vertical"></${prefix}ruler-vertical-grid>
     </${prefix}ruler-vertical>
     <${prefix}ruler-horizon>
-      <${prefix}ruler-horizon-grid v-repeat="horizon" v-component="grid-vertical" direction="horizon"></${prefix}ruler-horizon-grid>
+      <${prefix}ruler-point-value v-repeat="hpoint" v-component="ruler-point" direction="horizon"></${prefix}ruler-point-value>
+      <${prefix}ruler-horizon-grid v-repeat="horizon" v-component="ruler-grid" direction="horizon"></${prefix}ruler-horizon-grid>
     </${prefix}ruler-horizon>
   `
 });
