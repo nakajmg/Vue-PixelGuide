@@ -9,8 +9,27 @@ exec = require "child_process"
 exec = exec.exec
 bs = require "browser-sync"
 
-gulp.task "6to5", ->
-  gulp.src "src/js/**/*.js"
+order = [
+    "src/js/util/_header.js"
+    "src/js/util/variable.js"
+    "src/js/directive/guideline.js"
+    "src/js/component/guideline.js"
+    "src/js/component/ruler-grid.js"
+    "src/js/component/ruler-point.js"
+    "src/js/class/guidelines.js"
+    "src/js/class/rulers.js"
+    "src/js/main.js"
+    "src/js/util/_footer.js"
+]
+
+gulp.task "concat", ->
+  gulp.src order
+    .pipe concat "app.js"
+    .pipe gulp.dest "src/js"
+
+gulp.task "6to5", ["concat"], ->
+  # gulp.src "src/js/**/*.js"
+  gulp.src "src/js/app.js"
     .pipe plumber {errorHandler: notify.onError("<%= error.message %>") }
     .pipe do to5
     .pipe gulp.dest "dist/js"
