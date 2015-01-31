@@ -136,3 +136,11 @@ px-rulers px-ruler-horizon px-ruler-point-value {
   bottom: 13px;
   margin-left: -15px;
 }
+px-rulers px-ruler-controler {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: rgba(255,0,0,0.5);
+}
