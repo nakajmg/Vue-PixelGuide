@@ -73,6 +73,7 @@ var guidelines = new Vue({
   replace: true,
   template: `
     <${prefix}guide v-on="mousemove: _onMouseMove, mouseup: _onEndDrag">
+      <${prefix}rulers></${prefix}rulers>
       <horizon v-repeat="horizon" v-component="guideline" direction="x"></horizon>
       <vertical v-repeat="vertical" v-component="guideline" direction="y"></vertical>
     </${prefix}guide>
@@ -96,17 +97,19 @@ var guidelines = new Vue({
 guidelines.$mount();
 
 Vue.component('grid-vertical', {
-  replace: true,
+  paramAttributes: ['direction'],
   data() {
-    return {isPoint: null}
+    return {isPoint: null, isScale: null, top: null, left: null, position: {vertical: 'top', horizon: 'left'} }
   },
   template: `
-    <${prefix}ruler-grid v-style="top: $value + 'px'" v-attr="${prefix}ruler-grid-point: isPoint"></${prefix}ruler-grid>
-    <${prefix}ruler-point v-style="top: $value + 'px'" v-if="isPoint">{{$value}}</${prefix}ruler-point>
+    <${prefix}ruler-grid v-style="top: top + 'px', left: left + 'px'" v-attr="${prefix}ruler-grid-point: isPoint, ${prefix}ruler-grid-scale: isScale"></${prefix}ruler-grid>
+    <${prefix}ruler-point v-style="top: top + 'px', left: left + 'px'" v-if="isPoint">{{$value}}</${prefix}ruler-point>
   `,
   compiled() {
     if (!this.$value) return;
+    this[this.position[this.direction]] = this.$value;
     this.isPoint = !(this.$value % 50);
+    this.isScale = !(this.$value % 10);
   }
 });
 
@@ -130,24 +133,15 @@ var ruler = new Vue({
     this.vertical = varr;
     this.horizon = harr;
   },
-
-  partials: {
-    vertical: `
-      <${prefix}ruler-vertical>
-        <grid v-repeat="vertical" v-component="grid-vertical"></grid>
-      </${prefix}ruler-vertical>`,
-    horizon: `
-      <${prefix}ruler-horizon>
-        <grid v-repeat="horizon" v-component="grid-vertical"></grid>
-      </${prefix}ruler-horizon>`
-  },
   template: `
-    <${prefix}rulers>
-      <template v-partial="vertical"></template>
-      <template v-partial="horizon"></template>
-    </${prefix}rulers>
+    <${prefix}ruler-vertical>
+      <${prefix}ruler-vertical-grid v-repeat="vertical" v-component="grid-vertical" direction="vertical"></${prefix}ruler-vertical-grid>
+    </${prefix}ruler-vertical>
+    <${prefix}ruler-horizon>
+      <${prefix}ruler-horizon-grid v-repeat="horizon" v-component="grid-vertical" direction="horizon"></${prefix}ruler-horizon-grid>
+    </${prefix}ruler-horizon>
   `
 });
 ruler.$mount()
-ruler.$appendTo('body')
 guidelines.$appendTo('body');
+ruler.$appendTo(`${prefix}rulers`)

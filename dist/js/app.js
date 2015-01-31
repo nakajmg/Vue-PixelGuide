@@ -66,7 +66,7 @@ var guidelines = new Vue({
     vertical: [4, 8, 20, 30]
   },
   replace: true,
-  template: "\n    <" + prefix + "guide v-on=\"mousemove: _onMouseMove, mouseup: _onEndDrag\">\n      <horizon v-repeat=\"horizon\" v-component=\"guideline\" direction=\"x\"></horizon>\n      <vertical v-repeat=\"vertical\" v-component=\"guideline\" direction=\"y\"></vertical>\n    </" + prefix + "guide>\n  ",
+  template: "\n    <" + prefix + "guide v-on=\"mousemove: _onMouseMove, mouseup: _onEndDrag\">\n      <" + prefix + "rulers></" + prefix + "rulers>\n      <horizon v-repeat=\"horizon\" v-component=\"guideline\" direction=\"x\"></horizon>\n      <vertical v-repeat=\"vertical\" v-component=\"guideline\" direction=\"y\"></vertical>\n    </" + prefix + "guide>\n  ",
   methods: {
     _onMouseMove: function OnMouseMove(e) {
       if (!this.isDragged || !this.current) return;
@@ -86,14 +86,16 @@ var guidelines = new Vue({
 guidelines.$mount();
 
 Vue.component("grid-vertical", {
-  replace: true,
+  paramAttributes: ["direction"],
   data: function data() {
-    return { isPoint: null };
+    return { isPoint: null, isScale: null, top: null, left: null, position: { vertical: "top", horizon: "left" } };
   },
-  template: "\n    <" + prefix + "ruler-grid v-style=\"top: $value + 'px'\" v-attr=\"" + prefix + "ruler-grid-point: isPoint\"></" + prefix + "ruler-grid>\n    <" + prefix + "ruler-point v-style=\"top: $value + 'px'\" v-if=\"isPoint\">{{$value}}</" + prefix + "ruler-point>\n  ",
+  template: "\n    <" + prefix + "ruler-grid v-style=\"top: top + 'px', left: left + 'px'\" v-attr=\"" + prefix + "ruler-grid-point: isPoint, " + prefix + "ruler-grid-scale: isScale\"></" + prefix + "ruler-grid>\n    <" + prefix + "ruler-point v-style=\"top: top + 'px', left: left + 'px'\" v-if=\"isPoint\">{{$value}}</" + prefix + "ruler-point>\n  ",
   compiled: function compiled() {
     if (!this.$value) return;
+    this[this.position[this.direction]] = this.$value;
     this.isPoint = !(this.$value % 50);
+    this.isScale = !(this.$value % 10);
   }
 });
 
@@ -117,13 +119,8 @@ var ruler = new Vue({
     this.vertical = varr;
     this.horizon = harr;
   },
-
-  partials: {
-    vertical: "\n      <" + prefix + "ruler-vertical>\n        <grid v-repeat=\"vertical\" v-component=\"grid-vertical\"></grid>\n      </" + prefix + "ruler-vertical>",
-    horizon: "\n      <" + prefix + "ruler-horizon>\n        <grid v-repeat=\"horizon\" v-component=\"grid-vertical\"></grid>\n      </" + prefix + "ruler-horizon>"
-  },
-  template: "\n    <" + prefix + "rulers>\n      <template v-partial=\"vertical\"></template>\n      <template v-partial=\"horizon\"></template>\n    </" + prefix + "rulers>\n  "
+  template: "\n    <" + prefix + "ruler-vertical>\n      <" + prefix + "ruler-vertical-grid v-repeat=\"vertical\" v-component=\"grid-vertical\" direction=\"vertical\"></" + prefix + "ruler-vertical-grid>\n    </" + prefix + "ruler-vertical>\n    <" + prefix + "ruler-horizon>\n      <" + prefix + "ruler-horizon-grid v-repeat=\"horizon\" v-component=\"grid-vertical\" direction=\"horizon\"></" + prefix + "ruler-horizon-grid>\n    </" + prefix + "ruler-horizon>\n  "
 });
 ruler.$mount();
-ruler.$appendTo("body");
 guidelines.$appendTo("body");
+ruler.$appendTo("" + prefix + "rulers");

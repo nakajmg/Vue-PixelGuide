@@ -50,51 +50,73 @@ $prefix = "px-"
     color: #fff
     background-color: rgba(0, 0, 0, 0.3)
     border: 1px solid rgba(0, 0, 0, 0.35)
-  [direction="x"] px-info
+  [direction="x"] {$prefix}info
     left: 100%
-    margin-top: 10px
-  [direction="y"] px-info
-    top: 100%
     margin-left: 10px
+  [direction="y"] {$prefix}info
+    top: 100%
+    margin-top: -30px
 
 
 {$prefix}rulers
-  position: absolute
-  top: 0
-  left: 0
-  right: 0
-  bottom: 0
-  overflow: hidden
+  -webkit-user-select: none
   {$prefix}ruler-vertical
+    overflow: hidden
     position: absolute
     left: 0
     top: 0
     bottom: 0
-    width: 50px
+    width: 40px
     border-right: 1px solid rgba(0, 0, 0, 0.4)
     background-color: rgba(255, 255, 255, .3)
-    padding-left: 40px
     box-sizing: border-box
     {$prefix}ruler-grid
       position: absolute
       display: block
       right: 0
-      width: 9px
+      width: 7px
       border-top: 1px solid rgba(0, 0, 0, 0.0980392)
       &[{$prefix}ruler-grid-point]
         border-color: #000
-      
+        width: 13px
+      &[{$prefix}ruler-grid-scale]
+        border-color: #000      
     {$prefix}ruler-point
       position: absolute
       font-size: 10px
-      transform: scale(.8)
-      // right: calc(100% + 5px)
+      transform: scale(.7)
       text-align: right;
-      right: 10px
+      right: 11px
       margin-top: -7px
-  
+
   {$prefix}ruler-horizon
+    overflow: hidden
     position: absolute
+    left: 0
+    right: 0
     top: 0
-  
+    height: 30px
+    border-bottom: 1px solid rgba(0, 0, 0, 0.4)
+    background-color: rgba(255, 255, 255, .3)
+    box-sizing: border-box  
+    {$prefix}ruler-grid
+      position: absolute
+      display: block
+      bottom: 0
+      height: 9px
+      border-left: 1px solid rgba(0, 0, 0, 0.0980392)
+      &[{$prefix}ruler-grid-point]
+        border-color: #000
+        height: 15px
+      &[{$prefix}ruler-grid-scale]
+        border-color: #000
+    {$prefix}ruler-point
+      position: absolute
+      font-size: 10px
+      transform: scale(.7)
+      width: 30px;
+      text-align: center;
+      bottom: 13px
+      margin-left: -15px
+      
     
