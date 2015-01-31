@@ -10,5 +10,9 @@
     "**/.*",
     "node_modules",
     "bower_components"
-  ]
+  ],
+  "dependencies": {
+    "lodash": "~3.0.1",
+    "vue": "~0.11.4"
+  }
 }
