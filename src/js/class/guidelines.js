@@ -1,11 +1,10 @@
 var Guidelines = Vue.extend({
-
   data() {
     return {
       isDragged: null,
       current: null,
-      horizon: null,
-      vertical: null
+      horizon: [],
+      vertical: []
     }
   },
   replace: true,

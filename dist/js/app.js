@@ -88,13 +88,12 @@
   });
 
   var Guidelines = Vue.extend({
-
     data: function data() {
       return {
         isDragged: null,
         current: null,
-        horizon: null,
-        vertical: null
+        horizon: [],
+        vertical: []
       };
     },
     replace: true,
@@ -174,12 +173,7 @@
     template: "\n    <" + prefix + "ruler-vertical>\n      <" + prefix + "ruler-point v-repeat=\"vpoint\" v-component=\"ruler-point\" direction=\"vertical\"></" + prefix + "ruler-point>\n      <" + prefix + "ruler-vertical-grid v-repeat=\"vertical\" v-component=\"ruler-grid\" direction=\"vertical\"></" + prefix + "ruler-vertical-grid>\n      <" + prefix + "ruler-controler v-component=\"ruler-controler\" direction=\"vertical\"></" + prefix + "ruler-controler>\n    </" + prefix + "ruler-vertical>\n    <" + prefix + "ruler-horizon>\n      <" + prefix + "ruler-point v-repeat=\"hpoint\" v-component=\"ruler-point\" direction=\"horizon\"></" + prefix + "ruler-point>\n      <" + prefix + "ruler-horizon-grid v-repeat=\"horizon\" v-component=\"ruler-grid\" direction=\"horizon\"></" + prefix + "ruler-horizon-grid>\n      <" + prefix + "ruler-controler v-component=\"ruler-controler\" direction=\"horizon\"></" + prefix + "ruler-controler>\n    </" + prefix + "ruler-horizon>\n  "
   });
 
-  var guidelines = new Guidelines({
-    data: {
-      horizon: [60, 75, 80, 140],
-      vertical: [90, 120, 150, 300]
-    }
-  });
+  var guidelines = new Guidelines({});
   var rulers = new Rulers();
 
   guidelines.$mount();
@@ -188,3 +182,11 @@
   rulers.setGuidelines(guidelines);
   rulers.$appendTo("" + prefix + "rulers");
 })();
+// data: {
+//   horizon: [
+//     60, 75, 80, 140
+//   ],
+//   vertical: [
+//     90, 120, 150, 300
+//   ]
+// }

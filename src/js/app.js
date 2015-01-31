@@ -94,13 +94,12 @@ Vue.component('ruler-point', {
 });
 
 var Guidelines = Vue.extend({
-
   data() {
     return {
       isDragged: null,
       current: null,
-      horizon: null,
-      vertical: null
+      horizon: [],
+      vertical: []
     }
   },
   replace: true,
@@ -199,14 +198,14 @@ var Rulers = Vue.extend({
 });
 
 var guidelines = new Guidelines({
-  data: {
-    horizon: [
-      60, 75, 80, 140
-    ],
-    vertical: [
-      90, 120, 150, 300
-    ]
-  }
+  // data: {
+  //   horizon: [
+  //     60, 75, 80, 140
+  //   ],
+  //   vertical: [
+  //     90, 120, 150, 300
+  //   ]
+  // }
 });
 var rulers = new Rulers();
 
