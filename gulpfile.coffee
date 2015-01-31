@@ -51,6 +51,7 @@ gulp.task "default", ->
     server:
       baseDir: ["demo","bower_components", "dist"]
       directory: false
+      index: "develop.html"
     notify: false
     host: "localhost"
   gulp.watch ["src/js/**/*.js"], ["6to5", bs.reload]
