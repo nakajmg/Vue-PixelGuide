@@ -4,6 +4,7 @@ px-guide {
   left: 0;
   right: 0;
   bottom: 0;
+  overflow: hidden;
 }
 px-guide [direction="x"] px-line {
   position: absolute;
