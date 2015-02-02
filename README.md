@@ -1,5 +1,7 @@
 # Vue-PixelGuide
-PixelGuide reimprement using Vue.js
+Re-imprement PixelGuide using Vue.js.
+
+[PixelGuide(Chrome store)](https://chrome.google.com/webstore/detail/pixelguide/icgkmjbgjfhaofgfgolkeghoincaibhj?hl=ja)
 
 ## Demo
 
